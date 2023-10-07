@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, Button, TouchableOpacity } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
+// import { StackScreenProps } from '@react-navigation/stack';
 import { styles } from '../themes/appTheme';
+import { DrawerScreenProps } from '@react-navigation/drawer';
 
 //Yo al estar en un Stack, puedo crearme una nueva interface. Además al extender una interfaz en TypeScript, es como si "heredaras" las propiedades y tipos de esa interfaz, lo que te permite definir tipos personalizados para tus componentes y aprovechar las propiedades y tipos proporcionados por otras bibliotecas o interfaces genéricas, como en el caso de StackScreenProps.
 //Por eso usamos interface para este tipo de objetos, porque es más fácil extenderlo.
-interface Props extends StackScreenProps<any, any> { }; //<= El StackScreenProps, nos va a pedir 2 argumentos, 1 un objeto, 2 las propiedades que puede tener ese objeto. Además No se trata de heredar propiedades de un objeto específico, sino de extender una interfaz con otra. En este caso, Props es una interfaz que extiende la interfaz StackScreenProps<any, any>. Lo que significa es que Props hereda todas las propiedades y tipos definidos en StackScreenProps<any, any> y también puede agregar o reemplazar propiedades según sea necesario.
+
+interface Props extends DrawerScreenProps<any, any> {};
+// interface Props extends StackScreenProps<any, any> {}; // <= El StackScreenProps, nos va a pedir 2 argumentos, 1 un objeto, 2 las propiedades que puede tener ese objeto. Además No se trata de heredar propiedades de un objeto específico, sino de extender una interfaz con otra. En este caso, Props es una interfaz que extiende la interfaz StackScreenProps<any, any>. Lo que significa es que Props hereda todas las propiedades y tipos definidos en StackScreenProps<any, any> y también puede agregar o reemplazar propiedades según sea necesario.
 
 // StackScreenProps es una interfaz genérica proporcionada por @react-navigation/stack que define las propiedades típicas que se pueden esperar en una pantalla de navegación dentro de un stack en React Navigation. Estas propiedades incluyen cosas como la ruta, la navegación, los parámetros de la pantalla, etc.
 
@@ -16,6 +19,24 @@ interface Props extends StackScreenProps<any, any> { }; //<= El StackScreenProps
 export const Pagina1Screen = ({ navigation }: Props) => {//<= ¿Cómo hago la navegación? A: Una vez que estamos implementando este Stack de páginas, si nosotros venimos de React.js de la web, debemos recordar que cuando usabamos la navegación propia de React Router DOM, en los props, vamos a tener toda la información de la ruta, aquí en React-Native con el Stack Navigation sucede exactamente igual.
 
   // console.log( navigation );//<= Nosotros no estamos mandando ningun argumento en los props(properties del componente Pagina1Screen), pero de forma automática y por defecto, las properties las está colocando en nuestro functional component, StackNavigator, del archivo StackNavigator.tsx.
+
+  //Para agregar un menú de hamburguesas en el lado izquierdo del drawer, tenemos que hacer lo siguiente, aunque ya no es necesario, porque ahora viene por defecto en el drawer. Pero en este caso lo haré del lado derecho con fines didácticos:
+  useEffect(() => {
+  
+    navigation.setOptions ({
+      //headerRight recibe una funcion que retorna un JSX:
+      headerRight: () => (
+      <Button 
+        title='Menú'
+        onPress={ () => navigation.toggleDrawer() }
+      />
+    )
+
+
+    })
+    //No le colocamos dependencias, ya que solo se va a ejecutar una única vez
+  }, [])
+  
 
   return (
     <View style={styles.globalMargin}>
